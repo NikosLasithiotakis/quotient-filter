@@ -4,10 +4,18 @@
  * Copyright (c) 2014 Vedant Kumar <vsk@berkeley.edu>
  */
 
+#ifndef QF_H
+#define QF_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #pragma once
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 struct quotient_filter {
 	uint8_t qf_qbits;
@@ -106,3 +114,9 @@ bool qfi_done(struct quotient_filter *qf, struct qf_iterator *i);
  * Caution: Do not call this routine if qfi_done() == true.
  */
 uint64_t qfi_next(struct quotient_filter *qf, struct qf_iterator *i);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // QF_H
