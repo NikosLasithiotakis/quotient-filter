@@ -30,6 +30,33 @@ bool qf_init(struct quotient_filter *qf, uint32_t q, uint32_t r)
 	return qf->qf_table != NULL;
 }
 
+struct quotient_filter *qf_init2(uint32_t q, uint32_t r) 
+{
+    if (q == 0 || r == 0 || q + r > 64) {
+        return NULL;
+    }
+    size_t table_size = qf_table_size(q, r);
+    size_t total_size = sizeof(struct quotient_filter) + (table_size * sizeof(uint64_t));
+    
+    struct quotient_filter *qf = (struct quotient_filter *)malloc(total_size);
+    if(qf == NULL){
+        return NULL;
+    }
+    qf->qf_qbits = q;
+    qf->qf_rbits = r;
+    qf->qf_elem_bits = qf->qf_rbits + 3;
+    qf->qf_index_mask = LOW_MASK(q);
+    qf->qf_rmask = LOW_MASK(r);
+    qf->qf_elem_mask = LOW_MASK(qf->qf_elem_bits);
+    qf->qf_entries = 0;
+    qf->qf_max_size = 1 << q;
+
+    qf->qf_table = (uint64_t *)(qf + 1);
+    memset(qf->qf_table, 0, table_size * sizeof(uint64_t));
+
+    return qf;
+}
+
 /* Return QF[idx] in the lower bits. */
 static uint64_t get_elem(struct quotient_filter *qf, uint64_t idx)
 {
