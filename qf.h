@@ -120,6 +120,11 @@ bool qfi_done(struct quotient_filter *qf, struct qf_iterator *i);
  */
 uint64_t qfi_next(struct quotient_filter *qf, struct qf_iterator *i);
 
+/*
+ *Copies the contents of the existing filter’s header and table to the new filter.
+*/
+struct quotient_filter *quotient_copy(struct quotient_filter *qf);
+
 #ifdef __cplusplus
 }
 #endif
