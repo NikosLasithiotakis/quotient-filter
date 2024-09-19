@@ -511,3 +511,21 @@ uint64_t qfi_next(struct quotient_filter *qf, struct qf_iterator *i)
 
 	abort();
 }
+
+struct quotient_filter *quotient_copy(struct quotient_filter *qf)
+{
+    if(qf == NULL){
+        return NULL;
+    }
+    size_t table_size = qf_table_size(qf->qf_qbits, qf->qf_rbits);
+    size_t total_size = sizeof(struct quotient_filter) + (table_size * sizeof(uint64_t));
+    struct quotient_filter *copy = (struct quotient_filter *)malloc(total_size);
+    if(copy == NULL){
+        return NULL;
+    }
+    memcpy(copy, qf, sizeof(struct quotient_filter));
+	
+    copy->qf_table = (uint64_t *)(copy + 1);
+    memcpy(copy->qf_table, qf->qf_table, table_size * sizeof(uint64_t));
+    return copy;
+}
