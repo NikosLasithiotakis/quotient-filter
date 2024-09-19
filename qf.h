@@ -44,6 +44,11 @@ struct qf_iterator {
 bool qf_init(struct quotient_filter *qf, uint32_t q, uint32_t r);
 
 /*
+ * Allocates memory for both the quotient filter header and its table in a single block.
+ */
+struct quotient_filter *qf_init2(uint32_t q, uint32_t r);
+
+/*
  * Inserts a hash into the QF.
  * Only the lowest q+r bits are actually inserted into the QF table.
  *
