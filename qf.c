@@ -24,37 +24,37 @@ bool qf_init(struct quotient_filter *qf, uint32_t q, uint32_t r)
 	qf->qf_index_mask = LOW_MASK(q);
 	qf->qf_rmask = LOW_MASK(r);
 	qf->qf_elem_mask = LOW_MASK(qf->qf_elem_bits);
-	qf->qf_entries = 0; 
+	qf->qf_entries = 0;
 	qf->qf_max_size = 1 << q;
-	qf->qf_table = (uint64_t *) calloc(qf_table_size(q, r), 1);
+	qf->qf_table = (uint64_t *)calloc(qf_table_size(q, r), 1);
 	return qf->qf_table != NULL;
 }
 
-struct quotient_filter *qf_init2(uint32_t q, uint32_t r) 
+struct quotient_filter *qf_init2(uint32_t q, uint32_t r)
 {
-    if (q == 0 || r == 0 || q + r > 64) {
-        return NULL;
-    }
-    size_t table_size = qf_table_size(q, r);
-    size_t total_size = sizeof(struct quotient_filter) + (table_size * sizeof(uint64_t));
-    
-    struct quotient_filter *qf = (struct quotient_filter *)malloc(total_size);
-    if(qf == NULL){
-        return NULL;
-    }
-    qf->qf_qbits = q;
-    qf->qf_rbits = r;
-    qf->qf_elem_bits = qf->qf_rbits + 3;
-    qf->qf_index_mask = LOW_MASK(q);
-    qf->qf_rmask = LOW_MASK(r);
-    qf->qf_elem_mask = LOW_MASK(qf->qf_elem_bits);
-    qf->qf_entries = 0;
-    qf->qf_max_size = 1 << q;
+	if (q == 0 || r == 0 || q + r > 64) {
+		return NULL;
+	}
+	size_t table_size = qf_table_size(q, r);
+	size_t total_size = sizeof(struct quotient_filter) + (table_size * sizeof(uint64_t));
 
-    qf->qf_table = (uint64_t *)(qf + 1);
-    memset(qf->qf_table, 0, table_size * sizeof(uint64_t));
+	struct quotient_filter *qf = (struct quotient_filter *)malloc(total_size);
+	if (qf == NULL) {
+		return NULL;
+	}
+	qf->qf_qbits = q;
+	qf->qf_rbits = r;
+	qf->qf_elem_bits = qf->qf_rbits + 3;
+	qf->qf_index_mask = LOW_MASK(q);
+	qf->qf_rmask = LOW_MASK(r);
+	qf->qf_elem_mask = LOW_MASK(qf->qf_elem_bits);
+	qf->qf_entries = 0;
+	qf->qf_max_size = 1 << q;
 
-    return qf;
+	qf->qf_table = (uint64_t *)(qf + 1);
+	memset(qf->qf_table, 0, table_size * sizeof(uint64_t));
+
+	return qf;
 }
 
 /* Return QF[idx] in the lower bits. */
@@ -166,14 +166,12 @@ static inline bool is_run_start(uint64_t elt)
 	return !is_continuation(elt) && (is_occupied(elt) || is_shifted(elt));
 }
 
-static inline uint64_t hash_to_quotient(struct quotient_filter *qf,
-		uint64_t hash)
+static inline uint64_t hash_to_quotient(struct quotient_filter *qf, uint64_t hash)
 {
 	return (hash >> qf->qf_rbits) & qf->qf_index_mask;
 }
 
-static inline uint64_t hash_to_remainder(struct quotient_filter *qf,
-		uint64_t hash)
+static inline uint64_t hash_to_remainder(struct quotient_filter *qf, uint64_t hash)
 {
 	return hash & qf->qf_rmask;
 }
@@ -338,9 +336,7 @@ static void delete_entry(struct quotient_filter *qf, uint64_t s, uint64_t quot)
 				}
 			}
 
-			set_elem(qf, s, curr_occupied ?
-					set_occupied(updated_next) :
-					clr_occupied(updated_next));
+			set_elem(qf, s, curr_occupied ? set_occupied(updated_next) : clr_occupied(updated_next));
 			s = sp;
 			sp = incr(qf, sp);
 			curr = next;
@@ -415,8 +411,7 @@ bool qf_remove(struct quotient_filter *qf, uint64_t hash)
 	return true;
 }
 
-bool qf_merge(struct quotient_filter *qf1, struct quotient_filter *qf2,
-		struct quotient_filter *qfout)
+bool qf_merge(struct quotient_filter *qf1, struct quotient_filter *qf2, struct quotient_filter *qfout)
 {
 	uint32_t q = 1 + MAX(qf1->qf_qbits, qf2->qf_qbits);
 	uint32_t r = MAX(qf1->qf_rbits, qf2->qf_rbits);
@@ -514,18 +509,18 @@ uint64_t qfi_next(struct quotient_filter *qf, struct qf_iterator *i)
 
 struct quotient_filter *quotient_copy(struct quotient_filter *qf)
 {
-    if(qf == NULL){
-        return NULL;
-    }
-    size_t table_size = qf_table_size(qf->qf_qbits, qf->qf_rbits);
-    size_t total_size = sizeof(struct quotient_filter) + (table_size * sizeof(uint64_t));
-    struct quotient_filter *copy = (struct quotient_filter *)malloc(total_size);
-    if(copy == NULL){
-        return NULL;
-    }
-    memcpy(copy, qf, sizeof(struct quotient_filter));
-	
-    copy->qf_table = (uint64_t *)(copy + 1);
-    memcpy(copy->qf_table, qf->qf_table, table_size * sizeof(uint64_t));
-    return copy;
+	if (qf == NULL) {
+		return NULL;
+	}
+	size_t table_size = qf_table_size(qf->qf_qbits, qf->qf_rbits);
+	size_t total_size = sizeof(struct quotient_filter) + (table_size * sizeof(uint64_t));
+	struct quotient_filter *copy = (struct quotient_filter *)malloc(total_size);
+	if (copy == NULL) {
+		return NULL;
+	}
+	memcpy(copy, qf, sizeof(struct quotient_filter));
+
+	copy->qf_table = (uint64_t *)(copy + 1);
+	memcpy(copy->qf_table, qf->qf_table, table_size * sizeof(uint64_t));
+	return copy;
 }

@@ -13,9 +13,9 @@ extern "C" {
 
 #pragma once
 
-#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 struct quotient_filter {
 	uint8_t qf_qbits;
@@ -83,8 +83,7 @@ bool qf_remove(struct quotient_filter *qf, uint64_t hash);
  *
  * Returns false on ENOMEM.
  */
-bool qf_merge(struct quotient_filter *qf1, struct quotient_filter *qf2,
-	struct quotient_filter *qfout);
+bool qf_merge(struct quotient_filter *qf1, struct quotient_filter *qf2, struct quotient_filter *qfout);
 
 /*
  * Resets the QF table. This function does not deallocate any memory.
