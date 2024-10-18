@@ -124,6 +124,52 @@ uint64_t qfi_next(struct quotient_filter *qf, struct qf_iterator *i);
 */
 struct quotient_filter *quotient_copy(struct quotient_filter *qf);
 
+/* Return QF[idx] in the lower bits. */
+static uint64_t get_elem(struct quotient_filter *qf, uint64_t idx);
+
+/* Store the lower bits of elt into QF[idx]. */
+static void set_elem(struct quotient_filter *qf, uint64_t idx, uint64_t elt);
+
+static inline uint64_t incr(struct quotient_filter *qf, uint64_t idx);
+
+static inline uint64_t decr(struct quotient_filter *qf, uint64_t idx);
+
+static inline int is_occupied(uint64_t elt);
+
+static inline uint64_t set_occupied(uint64_t elt);
+
+static inline uint64_t clr_occupied(uint64_t elt);
+
+static inline int is_continuation(uint64_t elt);
+
+static inline uint64_t set_continuation(uint64_t elt);
+
+static inline uint64_t clr_continuation(uint64_t elt);
+
+static inline int is_shifted(uint64_t elt);
+
+static inline uint64_t set_shifted(uint64_t elt);
+
+static inline uint64_t clr_shifted(uint64_t elt);
+
+static inline uint64_t get_remainder(uint64_t elt);
+
+static inline bool is_empty_element(uint64_t elt);
+
+static inline bool is_cluster_start(uint64_t elt);
+
+static inline bool is_run_start(uint64_t elt);
+
+static inline uint64_t hash_to_quotient(struct quotient_filter *qf, uint64_t hash);
+
+static inline uint64_t hash_to_remainder(struct quotient_filter *qf, uint64_t hash);
+
+static uint64_t find_run_index(struct quotient_filter *qf, uint64_t fq);
+
+static void insert_into(struct quotient_filter *qf, uint64_t s, uint64_t elt);
+
+static void delete_entry(struct quotient_filter *qf, uint64_t s, uint64_t quot);
+
 #ifdef __cplusplus
 }
 #endif
