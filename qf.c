@@ -538,3 +538,27 @@ void qf_buffer_insert(struct quotient_filter *qf, uint64_t hash)
 		fprintf(stderr, "Buffer overflow.\n");
 	}
 }
+
+int compare_by_fq(const void *a, const void *b)
+{
+	uint64_t fq_a = ((struct quotient_remainder *)a)->fq;
+	uint64_t fq_b = ((struct quotient_remainder *)b)->fq;
+
+	if (fq_a < fq_b)
+		return -1;
+	if (fq_a > fq_b)
+		return 1;
+	return 0;
+}
+
+void qf_sort_buffer()
+{
+	qsort(buffer, current_index, sizeof(struct quotient_remainder), compare_by_fq);
+}
+
+void qf_clear_buffer()
+{
+	memset(buffer, 0, sizeof(buffer));
+	current_index = 0;
+	printf("Buffer has been cleared.\n");
+}

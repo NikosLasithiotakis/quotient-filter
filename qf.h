@@ -134,6 +134,12 @@ uint64_t qfi_next(struct quotient_filter *qf, struct qf_iterator *i);
 */
 struct quotient_filter *quotient_copy(struct quotient_filter *qf);
 
+void qf_buffer_insert(struct quotient_filter *qf, uint64_t hash);
+
+void qf_sort_buffer(void);
+
+void qf_clear_buffer(void);
+
 #ifdef __cplusplus
 }
 #endif
