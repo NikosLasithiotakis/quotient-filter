@@ -619,5 +619,4 @@ void qf_clear_buffer()
 {
 	memset(buffer, 0, sizeof(buffer));
 	current_index = 0;
-	printf("Buffer has been cleared.\n");
 }
