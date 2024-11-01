@@ -66,6 +66,8 @@ struct quotient_filter *qf_init2(uint32_t q, uint32_t r);
  */
 bool qf_insert(struct quotient_filter *qf, uint64_t hash);
 
+bool qf_insert2(struct quotient_filter *qf, struct quotient_remainder item);
+
 /*
  * Returns true if the QF may contain the hash. Returns false otherwise.
  */

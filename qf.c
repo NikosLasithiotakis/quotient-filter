@@ -281,6 +281,63 @@ bool qf_insert(struct quotient_filter *qf, uint64_t hash)
 	return true;
 }
 
+bool qf_insert2(struct quotient_filter *qf, struct quotient_remainder item)
+{
+	if (qf->qf_entries >= qf->qf_max_size) {
+		return false;
+	}
+
+	uint64_t fq = item.fq;
+	uint64_t fr = item.fr;
+	uint64_t T_fq = get_elem(qf, fq);
+	uint64_t entry = (fr << 3) & ~7;
+
+	/* Special-case filling canonical slots to simplify insert_into(). */
+	if (is_empty_element(T_fq)) {
+		set_elem(qf, fq, set_occupied(entry));
+		++qf->qf_entries;
+		return true;
+	}
+
+	if (!is_occupied(T_fq)) {
+		set_elem(qf, fq, set_occupied(T_fq));
+	}
+
+	uint64_t start = find_run_index(qf, fq);
+	uint64_t s = start;
+
+	if (is_occupied(T_fq)) {
+		/* Move the cursor to the insert position in the fq run. */
+		do {
+			uint64_t rem = get_remainder(get_elem(qf, s));
+			if (rem == fr) {
+				return true;
+			} else if (rem > fr) {
+				break;
+			}
+			s = incr(qf, s);
+		} while (is_continuation(get_elem(qf, s)));
+
+		if (s == start) {
+			/* The old start-of-run becomes a continuation. */
+			uint64_t old_head = get_elem(qf, start);
+			set_elem(qf, start, set_continuation(old_head));
+		} else {
+			/* The new element becomes a continuation. */
+			entry = set_continuation(entry);
+		}
+	}
+
+	/* Set the shifted bit if we can't use the canonical slot. */
+	if (s != fq) {
+		entry = set_shifted(entry);
+	}
+
+	insert_into(qf, s, entry);
+	++qf->qf_entries;
+	return true;
+}
+
 bool qf_may_contain(struct quotient_filter *qf, uint64_t hash)
 {
 	uint64_t fq = hash_to_quotient(qf, hash);
