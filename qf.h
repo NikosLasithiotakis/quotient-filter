@@ -40,7 +40,7 @@ struct quotient_remainder {
 	uint64_t fr;
 };
 
-#define BUFFER_SIZE 400000
+#define BUFFER_SIZE 40000000
 
 struct quotient_remainder buffer[BUFFER_SIZE];
 size_t current_index = 0;
