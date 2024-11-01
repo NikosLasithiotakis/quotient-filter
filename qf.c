@@ -13,6 +13,8 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define LOW_MASK(n) ((1ULL << (n)) - 1ULL)
 
+size_t current_index = 0;
+
 bool qf_init(struct quotient_filter *qf, uint32_t q, uint32_t r)
 {
 	if (q == 0 || r == 0 || q + r > 64) {
