@@ -4,6 +4,7 @@
  * Copyright (c) 2014 Vedant Kumar <vsk@berkeley.edu>
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -523,4 +524,17 @@ struct quotient_filter *quotient_copy(struct quotient_filter *qf)
 	copy->qf_table = (uint64_t *)(copy + 1);
 	memcpy(copy->qf_table, qf->qf_table, table_size * sizeof(uint64_t));
 	return copy;
+}
+
+void qf_buffer_insert(struct quotient_filter *qf, uint64_t hash)
+{
+	if (current_index < BUFFER_SIZE) {
+		uint64_t fq = hash_to_quotient(qf, hash);
+		uint64_t fr = hash_to_remainder(qf, hash);
+		buffer[current_index].fq = fq;
+		buffer[current_index].fr = fr;
+		current_index++;
+	} else {
+		fprintf(stderr, "Buffer overflow.\n");
+	}
 }

@@ -35,6 +35,16 @@ struct qf_iterator {
 	uint64_t qfi_visited;
 };
 
+struct quotient_remainder {
+	uint64_t fq;
+	uint64_t fr;
+};
+
+#define BUFFER_SIZE 400000
+
+struct quotient_remainder buffer[BUFFER_SIZE];
+size_t current_index = 0;
+
 /*
  * Initializes a quotient filter with capacity 2^q.
  * Increasing r improves the filter's accuracy but uses more space.
