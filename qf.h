@@ -43,7 +43,7 @@ struct quotient_remainder {
 #define BUFFER_SIZE 40000000
 
 struct quotient_remainder buffer[BUFFER_SIZE];
-size_t current_index = 0;
+extern size_t current_index = 0;
 
 /*
  * Initializes a quotient filter with capacity 2^q.
