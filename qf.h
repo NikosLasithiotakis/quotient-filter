@@ -136,10 +136,24 @@ uint64_t qfi_next(struct quotient_filter *qf, struct qf_iterator *i);
 */
 struct quotient_filter *quotient_copy(struct quotient_filter *qf);
 
+/*
+ * Inserts a hash value into the buffer.
+ * The hash is processed to generate a quotient (fq) and a remainder (fr),
+ * which are stored in the buffer for later sorting and processing.
+ */
 void qf_buffer_insert(struct quotient_filter *qf, uint64_t hash);
 
+/*
+ * Sorts the buffer in place based on the quotient (fq) field.
+ * The function uses the standard library qsort function, which sorts the buffer 
+ * in ascending order according to the comparison function `compare_by_fq`.
+ */
 void qf_sort_buffer(void);
 
+/*
+ * Clears the buffer by setting all entries to zero.
+ * The current_index is reset to 0, effectively clearing the buffer for new insertions.
+ */
 void qf_clear_buffer(void);
 
 #ifdef __cplusplus
