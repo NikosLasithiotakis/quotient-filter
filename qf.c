@@ -4,16 +4,14 @@
  * Copyright (c) 2014 Vedant Kumar <vsk@berkeley.edu>
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "qf.h"
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define LOW_MASK(n) ((1ULL << (n)) - 1ULL)
 
 size_t current_index = 0;
+
+struct quotient_remainder buffer[BUFFER_SIZE];
 
 bool qf_init(struct quotient_filter *qf, uint32_t q, uint32_t r)
 {

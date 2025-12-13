@@ -16,6 +16,9 @@ extern "C" {
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 struct quotient_filter {
 	uint8_t qf_qbits;
@@ -42,7 +45,7 @@ struct quotient_remainder {
 
 #define BUFFER_SIZE 40000000
 
-struct quotient_remainder buffer[BUFFER_SIZE];
+extern struct quotient_remainder buffer[BUFFER_SIZE];
 extern size_t current_index;
 
 /*
